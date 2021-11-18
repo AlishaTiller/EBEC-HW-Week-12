@@ -60,8 +60,8 @@ def main():
     consonants_used = []
     # if the player chooses to spin the wheel
     if activity_choosen == 'Spin the Wheel.':
-        # the program makes sure that are consonants left to choose by seeing if the dictionary is empty or not
-        while consonants_to_choose != {}:
+        # the program makes sure that are consonants left to choose by seeing if the list is empty or not
+        while consonants_to_choose != []:
             # call the spin_the_wheel function which returns a value at random from a virtual wheel
             cash_value = spin_the_wheel()
             # if bankrupt choosem the player's cash earnings for the round are set to zero and the turn ends
@@ -98,7 +98,49 @@ def main():
                 elif len(list(player_choice)) > 1: 
                     print(f'Please enter exactly one character.')
 
-                    
+
+    # Buy a vowel Part:
+
+    # player's current amount of cash
+    player_current_money = 300
+    vowels = ['A','E','I','O','U']
+    vowels_purchased = []
+    if activity_choosen == 'Buy a vowel.':
+        if vowels != []:
+        # if vowel in vowels:
+            # check to see if the player has enough cash in the current round
+            if player_current_money > 275:
+                vowel_choosen = input('Pick a vowel: ')
+                # to make input not case sensitive
+                vowel_choosen = vowel_choosen.upper()
+                # if the player's letter is in the phrase that was selected from the txt file
+                if vowel_choosen in phrase:
+                    # count the number of times that vowel appears in the phrase 
+                    occurrences_of_vowel = phrase.count(f'{vowel_choosen}')
+                    # all occurences of the guessed letter are reveraled and the player's earnings for the round are reduced by $275
+                    player_current_money = player_current_money - 275
+                    print(f"There is {occurrences_of_vowel} {vowel_choosen}'s.")
+                    # to remove the vowel just used and add it to a used list 
+                    vowels_bought = vowels.pop(vowel_choosen)
+                    vowels_purchased.append(vowels_bought)
+                # check if the users vowel pick is in the used list 
+                elif vowel_choosen in vowels_purchased:
+                    print(f'The letter {vowel_choosen} has already been purchased.')
+                # if the users vowel pick is in the consonants list 
+                elif vowel_choosen in consonants_to_choose:
+                    print(f'Consonants cannot be purchased.')
+                # if the users vowel pick length is more than 1
+                elif len(list(vowel_choosen)) > 1:
+                    print(f'Please enter exactly one character.')
+                # if the user vowel pick is not in the phrase selected from the txt file 
+                elif vowel_choosen not in phrase:
+                    print(f"I'm sorry, there are no {vowel_choosen}'s.")
+                # if fails all if statements then, assume it is a symbol character and display the following 
+                else:
+                    print(f'The character {vowel_choosen} is not a letter.')
+
+
+
                 
                 
     
