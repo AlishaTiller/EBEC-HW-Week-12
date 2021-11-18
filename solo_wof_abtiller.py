@@ -40,7 +40,17 @@ def main():
     # for loop to iterate 4 times because there are 4 rounds
     #for round in range(4):
 
-    phrase = 'Hello'
+    
+    phrase_list = []
+    with open('phrases.txt', 'r') as phrases:
+        lines = phrases.readlines()
+        # for each line in the file, add that phrase to the phrase_list
+        for line in lines: 
+            phrase_for_game = line.replace('\n', '')
+            phrase_list.append(phrase_for_game)
+        
+        phrase = random.choice(phrase_list)
+
     
     player_chooses = input('Enter the number of your choice: ')
     menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
