@@ -1,7 +1,7 @@
 """
-Author: Your Name, login@purdue.edu
-Assignment: m.n - Assignment Name
-Date: MM/DD/YYYY
+Author: Alisha Tiller, abtiller@purdue.edu
+Assignment: 12.1 - Solo Wof
+Date: 11/17/2021
 
 Description:
     Describe your program here.
