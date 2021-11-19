@@ -44,23 +44,40 @@ def load_phrases():
         for line in lines: 
             phrase_for_game = line.replace('\n', '')
             phrase_list.append(phrase_for_game)
+        # loads all the phrases in the text file and returns them as a list in random order
         phrases = random.choice(phrase_list)
 
     return phrases
 
 def main():
-    # for loop to iterate 4 times because there are 4 rounds
-    #for round in range(4):
+
+
     phrases = load_phrases()
     round = 0
     index_of_phrase_list = 0 
+
     for round in phrases:
         round +=1 
+        # start with the first phrase in the list (index 0) for round 1
         phrase = phrases[index_of_phrase_list]
+        # index increases by one, so each subsequent round of the game uses the next phrase in the list
         index_of_phrase_list += 1
-    
 
+
+    print(f'Welcome to Solo Wheel of Fortune!')
+    print(f'\n \n :: Solo WoF :::::::::::::::::::::::::::::: Round {round} of 4 ::')
+    print(f'::     ::')
+    print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
+    print(f'::   AEIOU   ::   BCDFGHJKLMNPQRSTVWXYZ   ::         $0 ::')
+    print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
+    print('\n \n Menu:')
+    print('  1 - Spin the wheel.')
+    print('  2 - Buy a vowel.')
+    print('  3 - Solve the puzzle.')
+    print('  4 - Quit the game.\n \n')
+    
     player_chooses = input('Enter the number of your choice: ')
+    
     menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
     # using the player_chooses as the key to access the dictionary which contains the value of what acitvity to do
     activity_choosen = menu_dict[player_chooses]
@@ -147,6 +164,8 @@ def main():
                 # if fails all if statements then, assume it is a symbol character and display the following 
                 else:
                     print(f'The character {vowel_choosen} is not a letter.')
+
+
 
     if activity_choosen == 'Solve the puzzle.':
         print('Enter your solution.')
