@@ -36,11 +36,7 @@ def spin_the_wheel():
     # cash values are returned as numbers and 'BANKRUPT' is returned as a string
     return cash_values
 
-def main():
-    # for loop to iterate 4 times because there are 4 rounds
-    #for round in range(4):
-
-    
+def load_phrases():
     phrase_list = []
     with open('phrases.txt', 'r') as phrases:
         lines = phrases.readlines()
@@ -48,15 +44,29 @@ def main():
         for line in lines: 
             phrase_for_game = line.replace('\n', '')
             phrase_list.append(phrase_for_game)
-        
-        phrase = random.choice(phrase_list)
+        phrases = random.choice(phrase_list)
 
+    return phrases
+
+def main():
+    # for loop to iterate 4 times because there are 4 rounds
+    #for round in range(4):
+    phrases = load_phrases()
+    round = 0
+    index_of_phrase_list = 0 
+    for round in phrases:
+        round +=1 
+        phrase = phrases[index_of_phrase_list]
+        index_of_phrase_list += 1
     
+
     player_chooses = input('Enter the number of your choice: ')
     menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
     # using the player_chooses as the key to access the dictionary which contains the value of what acitvity to do
     activity_choosen = menu_dict[player_chooses]
     consonants_to_choose = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
+
+    # Spin the Wheel
     consonants_used = []
     # if the player chooses to spin the wheel
     if activity_choosen == 'Spin the Wheel.':
@@ -67,7 +77,6 @@ def main():
             # if bankrupt choosem the player's cash earnings for the round are set to zero and the turn ends
             if cash_value == 'BANKRUPT':
                 roung_earnings = 0
-                break
             # if the follar amount is chosen
             else: 
                 # player is asked to choose a consonant from the list of unused consonants
@@ -99,7 +108,7 @@ def main():
                     print(f'Please enter exactly one character.')
 
 
-    # Buy a vowel Part:
+    # Buy A Vowel:
 
     # player's current amount of cash
     player_current_money = 300
@@ -139,9 +148,28 @@ def main():
                 else:
                     print(f'The character {vowel_choosen} is not a letter.')
 
+    if activity_choosen == 'Solve the puzzle.':
+        print('Enter your solution.')
+        print(f'Clues:')
+        guess = input('Guess: ')
+        if guess == phrase:
+            print('Ladies and gentlemen, we have a winner! \n')
+            print(f'You earned $ this round.')
+            #round += 1
+        else:
+            print("I'm sorry. The correct solution was:")
+            print(f'{phrase}')
+
+    if activity_choosen not in menu_dict:
+        print(f'"{player_chooses}" is and invalid choice." ')
+
+    if activity_choosen == 'Quit the game.':
+        print('\n You earned $0 this round. \n Thanks for playing! \n')
+        print('You earned a total of $.')
+        
 
 
-                
+    
                 
     
 
