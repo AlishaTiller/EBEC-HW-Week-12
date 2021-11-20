@@ -43,27 +43,25 @@ def load_phrases():
         # for each line in the file, add that phrase to the phrase_list
         for line in lines: 
             phrase_for_game = line.replace('\n', '')
+            phrase_for_game = phrase_for_game.upper()
             phrase_list.append(phrase_for_game)
         # loads all the phrases in the text file and returns them as a list in random order
-        phrases = random.choice(phrase_list)
+        random.shuffle(phrase_list)
 
-    return phrases
+    return phrase_list
 
-def main():
+def removed_guess(phrase,guessed):
 
+    result = ''
+    for letter in phrase:
+        if letter in guessed:
+            result = result + ' '
+        else:
+            result = result + letter
 
-    phrases = load_phrases()
-    round = 0
-    index_of_phrase_list = 0 
+    return result
 
-    for round in phrases:
-        round +=1 
-        # start with the first phrase in the list (index 0) for round 1
-        phrase = phrases[index_of_phrase_list]
-        # index increases by one, so each subsequent round of the game uses the next phrase in the list
-        index_of_phrase_list += 1
-
-
+def setting_up_the_game():
     print(f'Welcome to Solo Wheel of Fortune!')
     print(f'\n \n :: Solo WoF :::::::::::::::::::::::::::::: Round {round} of 4 ::')
     print(f'::     ::')
@@ -75,12 +73,9 @@ def main():
     print('  2 - Buy a vowel.')
     print('  3 - Solve the puzzle.')
     print('  4 - Quit the game.\n \n')
-    
-    player_chooses = input('Enter the number of your choice: ')
-    
-    menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
-    # using the player_chooses as the key to access the dictionary which contains the value of what acitvity to do
-    activity_choosen = menu_dict[player_chooses]
+
+def spin_the_wheel_action(activity_choosen, phrase):
+
     consonants_to_choose = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
 
     # Spin the Wheel
@@ -123,13 +118,13 @@ def main():
                 # check to see if what the player entered is a string of characters
                 elif len(list(player_choice)) > 1: 
                     print(f'Please enter exactly one character.')
-
-
-    # Buy A Vowel:
-
+                    
+def vowel_action(activity_choosen, phrase):
+    # Buy A Vowel
     # player's current amount of cash
     player_current_money = 300
     vowels = ['A','E','I','O','U']
+    consonants_to_choose = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
     vowels_purchased = []
     if activity_choosen == 'Buy a vowel.':
         if vowels != []:
@@ -165,8 +160,7 @@ def main():
                 else:
                     print(f'The character {vowel_choosen} is not a letter.')
 
-
-
+def puzzle_action(activity_choosen, phrase):
     if activity_choosen == 'Solve the puzzle.':
         print('Enter your solution.')
         print(f'Clues:')
@@ -179,12 +173,45 @@ def main():
             print("I'm sorry. The correct solution was:")
             print(f'{phrase}')
 
-    if activity_choosen not in menu_dict:
-        print(f'"{player_chooses}" is and invalid choice." ')
-
+def quit_game(activity_choosen):
     if activity_choosen == 'Quit the game.':
         print('\n You earned $0 this round. \n Thanks for playing! \n')
         print('You earned a total of $.')
+        
+
+def main():
+
+    phrases = load_phrases()
+    round = 0
+    index_of_phrase_list = 0 
+
+    for round in phrases:
+        round +=1 
+        # start with the first phrase in the list (index 0) for round 1
+        phrase = phrases[index_of_phrase_list]
+        # index increases by one, so each subsequent round of the game uses the next phrase in the list
+        index_of_phrase_list += 1
+        setting_up_the_game()
+        player_chooses = input('Enter the number of your choice: ')
+
+    menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
+    # using the player_chooses as the key to access the dictionary which contains the value of what acitvity to do
+    activity_choosen = menu_dict[player_chooses]
+
+    
+    if activity_choosen == 'Spin the Wheel.':
+        spin_the_wheel_action(activity_choosen, phrase)
+    elif activity_choosen == 'Buy a vowel.':
+        vowel_action(activity_choosen, phrase)
+    elif activity_choosen == 'Solve the puzzle.':
+        puzzle_action(activity_choosen, phrase)
+    elif activity_choosen == 'Quit the game.':
+        quit_game(activity_choosen)
+    else: 
+        # if activity_choosen not in menu_dict:
+        print(f'"{player_chooses}" is and invalid choice." ')
+
+    
         
 
 
