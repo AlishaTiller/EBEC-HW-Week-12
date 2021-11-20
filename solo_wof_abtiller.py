@@ -61,12 +61,25 @@ def removed_guess(phrase,guessed):
 
     return result
 
-def setting_up_the_game():
+def phrase_guessed(phrase,guessed):
+    result = ''
+    for letter in phrase:
+        if letter in guessed: 
+            result = result + letter
+        else: 
+            result = result + '_'
+
+    return result 
+
+
+def setting_up_the_game(round):
     print(f'Welcome to Solo Wheel of Fortune!')
-    print(f'\n \n :: Solo WoF :::::::::::::::::::::::::::::: Round {round} of 4 ::')
-    print(f'::     ::')
+    print(f'\n \n:: Solo WoF ::::::::::::::::::::::::::::: Round {round} of 4 ::')
+    print(f'::  {phrase_guessed(vowel_choosen)}   ::')
     print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
-    print(f'::   AEIOU   ::   BCDFGHJKLMNPQRSTVWXYZ   ::         $0 ::')
+    # AEIOU
+    # BCDFGHJKLMNPQRSTVWXYZ
+    print(f'::   {removed_guess()}   ::   {removed_guess()}   ::         $0 ::')
     print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
     print('\n \n Menu:')
     print('  1 - Spin the wheel.')
@@ -182,16 +195,16 @@ def quit_game(activity_choosen):
 def main():
 
     phrases = load_phrases()
-    round = 0
+    round = 1
     index_of_phrase_list = 0 
 
-    for round in phrases:
-        round +=1 
+    for rounds in phrases:
         # start with the first phrase in the list (index 0) for round 1
         phrase = phrases[index_of_phrase_list]
         # index increases by one, so each subsequent round of the game uses the next phrase in the list
         index_of_phrase_list += 1
-        setting_up_the_game()
+        setting_up_the_game(round)
+        round += 1 
         player_chooses = input('Enter the number of your choice: ')
 
     menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
