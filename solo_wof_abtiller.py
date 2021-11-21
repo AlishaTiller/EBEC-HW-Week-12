@@ -75,7 +75,7 @@ def phrase_guessed(phrase,guessed):
 def setting_up_the_game(round):
     print(f'Welcome to Solo Wheel of Fortune!')
     print(f'\n \n:: Solo WoF ::::::::::::::::::::::::::::: Round {round} of 4 ::')
-    print(f'::  {phrase_guessed(vowel_choosen)}   ::')
+    print(f'::  {phrase_guessed()}   ::')
     print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
     # AEIOU
     # BCDFGHJKLMNPQRSTVWXYZ
@@ -197,6 +197,7 @@ def main():
     phrases = load_phrases()
     round = 1
     index_of_phrase_list = 0 
+    menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
 
     for rounds in phrases:
         # start with the first phrase in the list (index 0) for round 1
@@ -206,23 +207,20 @@ def main():
         setting_up_the_game(round)
         round += 1 
         player_chooses = input('Enter the number of your choice: ')
+        # using the player_chooses as the key to access the dictionary which contains the value of what acitvity to do
+        activity_choosen = menu_dict[player_chooses]
 
-    menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
-    # using the player_chooses as the key to access the dictionary which contains the value of what acitvity to do
-    activity_choosen = menu_dict[player_chooses]
-
-    
-    if activity_choosen == 'Spin the Wheel.':
-        spin_the_wheel_action(activity_choosen, phrase)
-    elif activity_choosen == 'Buy a vowel.':
-        vowel_action(activity_choosen, phrase)
-    elif activity_choosen == 'Solve the puzzle.':
-        puzzle_action(activity_choosen, phrase)
-    elif activity_choosen == 'Quit the game.':
-        quit_game(activity_choosen)
-    else: 
-        # if activity_choosen not in menu_dict:
-        print(f'"{player_chooses}" is and invalid choice." ')
+        if activity_choosen == 'Spin the Wheel.':
+            spin_the_wheel_action(activity_choosen, phrase)
+        elif activity_choosen == 'Buy a vowel.':
+            vowel_action(activity_choosen, phrase)
+        elif activity_choosen == 'Solve the puzzle.':
+            puzzle_action(activity_choosen, phrase)
+        elif activity_choosen == 'Quit the game.':
+            quit_game(activity_choosen)
+        else: 
+            # if activity_choosen not in menu_dict:
+            print(f'"{player_chooses}" is and invalid choice." ')
 
     
         
