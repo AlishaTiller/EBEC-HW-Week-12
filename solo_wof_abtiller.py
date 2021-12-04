@@ -27,6 +27,8 @@ Academic Integrity Statement:
 """
 
 import random
+consonants = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
+vowels = ['A', 'E', 'I', 'O', 'U']
 
 def spin_the_wheel():
     
@@ -73,7 +75,6 @@ def phrase_guessed(phrase,guessed):
 
     return result 
 
-
 def setting_up_the_game(round, phrase, guessed):
     print(phrase)
     print(guessed)
@@ -91,110 +92,94 @@ def setting_up_the_game(round, phrase, guessed):
     print('  3 - Solve the puzzle.')
     print('  4 - Quit the game.\n \n')
 
-def spin_the_wheel_action(activity_choosen, phrase):
+def spin_the_wheel_action(phrase, guessed, player_current_money):
+    remaining_consonants = filter(lambda letter: not letter in guessed, consonants)
+    # player is asked to choose a consonant from the list of unused consonants
+    # call the spin_the_wheel function which returns a value at random from a virtual wheel
+    cash_value = spin_the_wheel()
+    # if bankrupt choosem the player's cash earnings for the round are set to zero and the turn ends
+    if cash_value == 'BANKRUPT':
+        return '', - player_current_money
+    player_choice = input('Pick a consonant: ')
+    # this makes it so the player choosing a consonant is not case sensitive because it gets converted to a capital
+    # letter regardless if the player entered the letter in lowercase or uppercase
+    player_choice = player_choice.capitalize()
+    if not player_choice in remaining_consonants:
+        print(f'The letter {player_choice.upper()} has already been used.')
+        return '', 0
+    # check to see if the player enters a number 
+    if player_choice == int(player_choice):
+        print(f'The character {player_choice} is not a letter.')
+        return '', 0
+    # check to see if what the player entered is a string of characters
+    if len(player_choice) > 1: 
+        print(f'Please enter exactly one character.')
+        return '', 0
+    if not player_choice in phrase:
+        print(f"I'm sorry, there are no {player_choice}'s.")
+        return '', 0
+    # count the number of times that letter appears in the phrase 
+    occurrences_of_letter = phrase.count(f'{player_choice}')
+    dollar_amount_earned = cash_value * occurrences_of_letter
+    print(f'There is {occurrences_of_letter}{player_choice}, which earns you ${dollar_amount_earned}.')
+    # remove the consonant from the consonants_to_choose list and add it to the consonants_used list
+    return player_choice, dollar_amount_earned
 
-    consonants_to_choose = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
-
-    # Spin the Wheel
-    consonants_used = []
-    # if the player chooses to spin the wheel
-    if activity_choosen == 'Spin the Wheel.':
-        # the program makes sure that are consonants left to choose by seeing if the list is empty or not
-        if consonants_to_choose != []:
-            # call the spin_the_wheel function which returns a value at random from a virtual wheel
-            cash_value = spin_the_wheel()
-            # if bankrupt choosem the player's cash earnings for the round are set to zero and the turn ends
-            if cash_value == 'BANKRUPT':
-                roung_earnings = 0
-            # if the follar amount is chosen
-            else: 
-                # player is asked to choose a consonant from the list of unused consonants
-                player_choice = input('Pick a consonant: ')
-                # this makes it so the player choosing a consonant is not case sensitive because it gets converted to a capital
-                # letter regardless if the player entered the letter in lowercase or uppercase
-                player_choice = player_choice.capitalize()
-                # check to see if the letter the player chose is in the list
-                if player_choice in consonants_to_choose:
-                        # if the player's letter is in the phrase that was selected from the txt file
-                        if player_choice in phrase:
-                            # count the number of times that letter appears in the phrase 
-                            occurrences_of_letter = phrase.count(f'{player_choice}')
-                            # player earns the dollar amount of the spin mulitplied by the number of times the guessed letter appears 
-                            # in the phrase
-                            dollar_amount_earned = cash_value * occurrences_of_letter
-                            print(f'There is {occurrences_of_letter}{player_choice}, which earns you ${dollar_amount_earned}.')
-                        # remove the consonant from the consonants_to_choose list and add it to the consonants_used list
-                        consonants_to_choose.remove(player_choice)
-                        consonants_used.append(player_choice)
-                # check to see if the player choose a letter that already has been used from the list of consonants_used 
-                elif player_choice in consonants_used:
-                    print(f'The letter {player_choice.upper()} has already been used.')
-                # check to see if the player enters a number 
-                elif player_choice == int(player_choice):
-                    print(f'The character {player_choice} is not a letter.')
-                # check to see if what the player entered is a string of characters
-                elif len(list(player_choice)) > 1: 
-                    print(f'Please enter exactly one character.')
-                return player_choice
-                    
-def vowel_action(activity_choosen, phrase):
+                 
+def vowel_action(phrase, guessed, player_current_money):
     # Buy A Vowel
     # player's current amount of cash
-    player_current_money = 300
-    vowels = ['A','E','I','O','U']
-    consonants_to_choose = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
-    vowels_purchased = []
-    if activity_choosen == 'Buy a vowel.':
-        if vowels != []:
-        # if vowel in vowels:
-            # check to see if the player has enough cash in the current round
-            if player_current_money > 275:
-                vowel_choosen = input('Pick a vowel: ')
-                # to make input not case sensitive
-                vowel_choosen = vowel_choosen.upper()
-                # if the player's letter is in the phrase that was selected from the txt file
-                if vowel_choosen in phrase:
-                    # count the number of times that vowel appears in the phrase 
-                    occurrences_of_vowel = phrase.count(f'{vowel_choosen}')
-                    # all occurences of the guessed letter are reveraled and the player's earnings for the round are reduced by $275
-                    player_current_money = player_current_money - 275
-                    print(f"There is {occurrences_of_vowel} {vowel_choosen}'s.")
-                    # to remove the vowel just used and add it to a used list 
-                    vowels.remove(vowel_choosen)
-                    vowels_purchased.append(vowel_choosen)
-                # check if the users vowel pick is in the used list 
-                elif vowel_choosen in vowels_purchased:
-                    print(f'The letter {vowel_choosen} has already been purchased.')
-                # if the users vowel pick is in the consonants list 
-                elif vowel_choosen in consonants_to_choose:
-                    print(f'Consonants cannot be purchased.')
-                # if the users vowel pick length is more than 1
-                elif len(list(vowel_choosen)) > 1:
-                    print(f'Please enter exactly one character.')
-                # if the user vowel pick is not in the phrase selected from the txt file 
-                elif vowel_choosen not in phrase:
-                    print(f"I'm sorry, there are no {vowel_choosen}'s.")
-                # if fails all if statements then, assume it is a symbol character and display the following 
-                else:
-                    print(f'The character {vowel_choosen} is not a letter.')
+    remaining_vowels = filter(lambda letter: not letter in guessed, vowels)
+    if len(remaining_vowels) == 0:
+        print('There are no more vowels to buy.')
+        return ''
+    if player_current_money < 275:
+        print('You need at least $275 to buy a vowel.')
+        return ''
+    vowel_choosen = input('Pick a vowel: ')
+    # to make input not case sensitive
+    vowel_choosen = vowel_choosen.upper()
+    if vowel_choosen in guessed:
+        print(f'The letter {vowel_choosen} has already been purchased.')
+        return ''
+    # if the users vowel pick is in the consonants list 
+    if vowel_choosen in consonants:
+        print(f'Consonants cannot be purchased.')
+        return ''
+    # if the users vowel pick length is more than 1
+    if len(vowel_choosen) > 1:
+        print(f'Please enter exactly one character.')
+        return ''
+    # if the user vowel pick is not in the phrase selected from the txt file 
+    if not vowel_choosen in phrase:
+        print(f"I'm sorry, there are no {vowel_choosen}'s.")
+        return ''
+    if not vowel_choosen in vowels:
+        print(f'The character {vowel_choosen} is not a letter.')
+        return ''
+    # count the number of times that vowel appears in the phrase 
+    occurrences_of_vowel = phrase.count(f'{vowel_choosen}')
+    # all occurences of the guessed letter are reveraled and the player's earnings for the round are reduced by $275
+    player_current_money = player_current_money - 275
+    print(f"There is {occurrences_of_vowel} {vowel_choosen}'s.")
+    return vowel_choosen         
+                
 
-def puzzle_action(activity_choosen, phrase):
-    if activity_choosen == 'Solve the puzzle.':
-        print('Enter your solution.')
-        print(f'Clues:')
-        guess = input('Guess: ')
-        if guess == phrase:
-            print('Ladies and gentlemen, we have a winner! \n')
-            print(f'You earned $ this round.')
-            #round += 1
-        else:
-            print("I'm sorry. The correct solution was:")
-            print(f'{phrase}')
+def puzzle_action(phrase, player_current_money):
+    print('Enter your solution.')
+    print(f'Clues:')
+    guess = input('Guess: ')
+    if guess == phrase:
+        print('Ladies and gentlemen, we have a winner! \n')
+        print(f'You earned ${max(player_current_money,1000)} this round.')
+        return True
+    print("I'm sorry. The correct solution was:")
+    print(f'{phrase}')
+    return False
 
-def quit_game(activity_choosen):
-    if activity_choosen == 'Quit the game.':
-        print('\n You earned $0 this round. \n Thanks for playing! \n')
-        print('You earned a total of $.')
+def quit_game(player_current_money,earning_per_round):      
+    print(f'\n You earned ${earning_per_round} this round. \n Thanks for playing! \n')
+    print(f'You earned a total of ${player_current_money}.')
         
 
 def main():
@@ -204,6 +189,7 @@ def main():
     index_of_phrase_list = 0 
     menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
     guessed = ''
+    total_earnings = 0
     
     for games in phrases:
         # start with the first phrase in the list (index 0) for round 1
@@ -211,21 +197,29 @@ def main():
         while True:
             # index increases by one, so each subsequent round of the game uses the next phrase in the list
             index_of_phrase_list += 1
+            round_earnings = 0
             setting_up_the_game(round, phrase, guessed)
             round += 1 
             player_chooses = int(input('Enter the number of your choice: '))
             # using the player_chooses as the key to access the dictionary which contains the value of what acitvity to do
             activity_choosen = menu_dict[player_chooses]
             if activity_choosen == 'Spin the Wheel.':
-                c = spin_the_wheel_action(activity_choosen, phrase)
-                guessed += c
+                guessed_consonant, dollar_amount_earned = spin_the_wheel_action(phrase, guessed, round_earnings)
+                guessed += guessed_consonant
+                round_earnings += dollar_amount_earned
             elif activity_choosen == 'Buy a vowel.':
-                vowel_action(activity_choosen, phrase)
+                guessed_vowel = vowel_action(phrase, guessed, round_earnings)
+                guessed += guessed_vowel
+                if guessed_vowel != '':
+                    round_earnings -= 275
             elif activity_choosen == 'Solve the puzzle.':
-                puzzle_action(activity_choosen, phrase)
-                break
+                solved = puzzle_action(phrase, round_earnings)
+                if solved:
+                    total_earnings += round_earnings
+                    break 
             elif activity_choosen == 'Quit the game.':
-                quit_game(activity_choosen)
+                quit_game(total_earnings, round_earnings)
+                quit()
             else: 
                 # if activity_choosen not in menu_dict:
                 print(f'"{player_chooses}" is and invalid choice." ')
