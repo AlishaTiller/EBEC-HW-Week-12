@@ -75,16 +75,11 @@ def phrase_guessed(phrase,guessed):
 
     return result 
 
-def setting_up_the_game(round, phrase, guessed):
-    print(phrase)
-    print(guessed)
-    print(f'Welcome to Solo Wheel of Fortune!')
+def status_report(round, phrase, guessed, round_earnings):
     print(f'\n \n:: Solo WoF :::::::::::::::::::::::::::::: Round {round} of 4 ::')
     print(f'::{phrase_guessed(phrase, guessed).center(54)}::')
     print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
-    # AEIOU
-    # BCDFGHJKLMNPQRSTVWXYZ
-    print(f'::   {removed_guess("AEIOU", guessed)}   ::   {removed_guess("BCDFGHJKLMNPQRSTVWXYZ",guessed)}   ::         $0 ::')
+    print(f'::   {removed_guess("AEIOU", guessed)}   ::   {removed_guess("BCDFGHJKLMNPQRSTVWXYZ",guessed)}   ::{("$" + str(round_earnings)).rjust(11)} ::')
     print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
     print('\n \n Menu:')
     print('  1 - Spin the wheel.')
@@ -93,7 +88,7 @@ def setting_up_the_game(round, phrase, guessed):
     print('  4 - Quit the game.\n \n')
 
 def spin_the_wheel_action(phrase, guessed, player_current_money):
-    remaining_consonants = filter(lambda letter: not letter in guessed, consonants)
+    remaining_consonants = list(filter(lambda letter: not letter in guessed, consonants))
     # player is asked to choose a consonant from the list of unused consonants
     # call the spin_the_wheel function which returns a value at random from a virtual wheel
     cash_value = spin_the_wheel()
@@ -104,12 +99,15 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
     # this makes it so the player choosing a consonant is not case sensitive because it gets converted to a capital
     # letter regardless if the player entered the letter in lowercase or uppercase
     player_choice = player_choice.capitalize()
+    # check to see if the player enters a number 
+    if not player_choice in consonants and not player_choice in vowels:
+        print(f'The character {player_choice} is not a letter.')
+        return '', 0
+    if player_choice in vowels:
+        print(f'Vowels must be purchased.')
+        return '', 0
     if not player_choice in remaining_consonants:
         print(f'The letter {player_choice.upper()} has already been used.')
-        return '', 0
-    # check to see if the player enters a number 
-    if player_choice == int(player_choice):
-        print(f'The character {player_choice} is not a letter.')
         return '', 0
     # check to see if what the player entered is a string of characters
     if len(player_choice) > 1: 
@@ -129,7 +127,7 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
 def vowel_action(phrase, guessed, player_current_money):
     # Buy A Vowel
     # player's current amount of cash
-    remaining_vowels = filter(lambda letter: not letter in guessed, vowels)
+    remaining_vowels = list(filter(lambda letter: not letter in guessed, vowels))
     if len(remaining_vowels) == 0:
         print('There are no more vowels to buy.')
         return ''
@@ -183,46 +181,43 @@ def quit_game(player_current_money,earning_per_round):
         
 
 def main():
-
+    print(f'Welcome to Solo Wheel of Fortune!')
     phrases = load_phrases()
-    round = 1
-    index_of_phrase_list = 0 
-    menu_dict = {1: 'Spin the Wheel.', 2: 'Buy a vowel.', 3: 'Solve the puzzle.', 4: 'Quit the game.'}
-    guessed = ''
     total_earnings = 0
     
-    for games in phrases:
-        # start with the first phrase in the list (index 0) for round 1
-        phrase = phrases[index_of_phrase_list]
+    for phrase in phrases:
+        round_earnings = 0
+        round = 0
+        guessed = ''
         while True:
-            # index increases by one, so each subsequent round of the game uses the next phrase in the list
-            index_of_phrase_list += 1
-            round_earnings = 0
-            setting_up_the_game(round, phrase, guessed)
             round += 1 
-            player_chooses = int(input('Enter the number of your choice: '))
+            if round > 4:
+                print(f'You earned a total of ${total_earnings}.')
+                quit()
+            # index increases by one, so each subsequent round of the game uses the next phrase in the list
+            status_report(round, phrase, guessed, round_earnings)
+            player_chooses = input('Enter the number of your choice: ')
             # using the player_chooses as the key to access the dictionary which contains the value of what acitvity to do
-            activity_choosen = menu_dict[player_chooses]
-            if activity_choosen == 'Spin the Wheel.':
+            if player_chooses == '1':
                 guessed_consonant, dollar_amount_earned = spin_the_wheel_action(phrase, guessed, round_earnings)
                 guessed += guessed_consonant
                 round_earnings += dollar_amount_earned
-            elif activity_choosen == 'Buy a vowel.':
+            elif player_chooses == '2':
                 guessed_vowel = vowel_action(phrase, guessed, round_earnings)
                 guessed += guessed_vowel
                 if guessed_vowel != '':
                     round_earnings -= 275
-            elif activity_choosen == 'Solve the puzzle.':
+            elif player_chooses == '3':
                 solved = puzzle_action(phrase, round_earnings)
                 if solved:
                     total_earnings += round_earnings
                     break 
-            elif activity_choosen == 'Quit the game.':
+            elif player_chooses == '4':
                 quit_game(total_earnings, round_earnings)
                 quit()
             else: 
                 # if activity_choosen not in menu_dict:
-                print(f'"{player_chooses}" is and invalid choice." ')
+                print(f'"{player_chooses}" is an invalid choice." ')
 
     
         
