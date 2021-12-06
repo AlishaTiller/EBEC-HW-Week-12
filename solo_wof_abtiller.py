@@ -45,7 +45,7 @@ def load_phrases():
         # for each line in the file, add that phrase to the phrase_list
         for line in lines: 
             phrase_for_game = line.replace('\n', '')
-            phrase_for_game = phrase_for_game.upper()
+            phrase_for_game = phrase_for_game
             phrase_list.append(phrase_for_game)
         # loads all the phrases in the text file and returns them as a list in random order
         random.shuffle(phrase_list)
@@ -186,6 +186,7 @@ def main():
     total_earnings = 0
     
     for phrase in phrases:
+        phrase = phrase.upper()
         round_earnings = 0
         round = 0
         guessed = ''
