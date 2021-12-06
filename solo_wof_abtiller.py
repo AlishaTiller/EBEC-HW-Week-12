@@ -76,16 +76,16 @@ def phrase_guessed(phrase,guessed):
     return result 
 
 def status_report(round, phrase, guessed, round_earnings):
-    print(f'\n \n:: Solo WoF :::::::::::::::::::::::::::::: Round {round} of 4 ::')
+    print(f'\n:: Solo WoF :::::::::::::::::::::::::::::: Round {round} of 4 ::')
     print(f'::{phrase_guessed(phrase, guessed).center(54)}::')
     print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
     print(f'::   {removed_guess("AEIOU", guessed)}   ::   {removed_guess("BCDFGHJKLMNPQRSTVWXYZ",guessed)}   ::{("$" + str(round_earnings)).rjust(11)} ::')
     print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
-    print('\n \n Menu:')
+    print('\nMenu:')
     print('  1 - Spin the wheel.')
     print('  2 - Buy a vowel.')
     print('  3 - Solve the puzzle.')
-    print('  4 - Quit the game.\n \n')
+    print('  4 - Quit the game.\n')
 
 def spin_the_wheel_action(phrase, guessed, player_current_money):
     remaining_consonants = list(filter(lambda letter: not letter in guessed, consonants))
@@ -194,7 +194,7 @@ def main():
             round += 1 
             if round > 4:
                 print(f'You earned a total of ${total_earnings}.')
-                quit()
+                break
             # index increases by one, so each subsequent round of the game uses the next phrase in the list
             status_report(round, phrase, guessed, round_earnings)
             player_chooses = input('Enter the number of your choice: ')
@@ -215,7 +215,7 @@ def main():
                     break 
             elif player_chooses == '4':
                 quit_game(total_earnings, round_earnings)
-                quit()
+                return
             else: 
                 # if activity_choosen not in menu_dict:
                 print(f'"{player_chooses}" is an invalid choice." ')
