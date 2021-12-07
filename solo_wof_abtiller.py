@@ -103,9 +103,15 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
     player_choice = player_choice.capitalize()
     # check to see if the player enters a number 
     #if player_choice.isspace() == True:
-    if player_choice == '':
+    while player_choice == '':
             print(f'Please enter exactly one character.')
-            return '', 0, False
+            player_choice = input('Pick a consonant: ')
+            player_choice = player_choice.capitalize()
+    while len(player_choice) > 1: 
+        print(f'Please enter exactly one character.')
+        player_choice = input('Pick a consonant: ')
+        player_choice = player_choice.capitalize()
+        # return '', 0, False
     if not player_choice in consonants and not player_choice in vowels:
         print(f'The character {player_choice} is not a letter.')
         return player_choice, 0, False
@@ -116,9 +122,6 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
         print(f'The letter {player_choice.upper()} has already been used.')
         return '', 0, False
     # check to see if what the player entered is a string of characters
-    if len(player_choice) > 1: 
-        print(f'Please enter exactly one character.')
-        return '', 0, False
     if not player_choice in phrase:
         print(f"I'm sorry, there are no {player_choice}'s.")
         return player_choice, 0, False
