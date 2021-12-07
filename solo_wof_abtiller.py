@@ -94,6 +94,7 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
     cash_value = spin_the_wheel()
     # if bankrupt choosem the player's cash earnings for the round are set to zero and the turn ends
     if cash_value == 'BANKRUPT':
+        print('The wheel landed on BANKRUPT.\nYou lost $0!')
         return '', - player_current_money, True
     print(f'The wheel landed on ${cash_value:,}.')
     player_choice = input('Pick a consonant: ')
