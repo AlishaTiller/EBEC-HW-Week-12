@@ -102,7 +102,8 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
     # letter regardless if the player entered the letter in lowercase or uppercase
     player_choice = player_choice.capitalize()
     # check to see if the player enters a number 
-    if player_choice.isspace() == True:
+    #if player_choice.isspace() == True:
+    if player_choice == '':
             print(f'Please enter exactly one character.')
             return '', 0, False
     if not player_choice in consonants and not player_choice in vowels:
