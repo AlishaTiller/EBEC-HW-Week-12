@@ -94,7 +94,7 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
     cash_value = spin_the_wheel()
     # if bankrupt choosem the player's cash earnings for the round are set to zero and the turn ends
     if cash_value == 'BANKRUPT':
-        print(f'The wheel landed on BANKRUPT.\nYou lost ${player_current_money}!')
+        print(f'The wheel landed on BANKRUPT.\nYou lost ${player_current_money:,}!')
         return '', - player_current_money, True
     print(f'The wheel landed on ${cash_value:,}.')
     player_choice = input('Pick a consonant: ')
@@ -102,6 +102,9 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
     # letter regardless if the player entered the letter in lowercase or uppercase
     player_choice = player_choice.capitalize()
     # check to see if the player enters a number 
+    if player_choice.isspace() == True:
+            print(f'Please enter exactly one character.')
+            return '', 0, False
     if not player_choice in consonants and not player_choice in vowels:
         print(f'The character {player_choice} is not a letter.')
         return player_choice, 0, False
