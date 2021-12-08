@@ -112,15 +112,21 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
         player_choice = input('Pick a consonant: ')
         player_choice = player_choice.capitalize()
         # return '', 0, False
-    if not player_choice in consonants and not player_choice in vowels:
+    while not player_choice in consonants and not player_choice in vowels:
         print(f'The character {player_choice} is not a letter.')
-        return player_choice, 0, False
-    if player_choice in vowels:
+        player_choice = input('Pick a consonant: ')
+        player_choice = player_choice.capitalize()
+        # return player_choice, 0, False
+    while player_choice in vowels:
         print(f'Vowels must be purchased.')
-        return '', 0, False
-    if not player_choice in remaining_consonants:
+        player_choice = input('Pick a consonant: ')
+        player_choice = player_choice.capitalize()
+        # return '', 0, False
+    while not player_choice in remaining_consonants:
         print(f'The letter {player_choice.upper()} has already been used.')
-        return '', 0, False
+        player_choice = input('Pick a consonant: ')
+        player_choice = player_choice.capitalize()
+        # return '', 0, False
     # check to see if what the player entered is a string of characters
     if not player_choice in phrase:
         print(f"I'm sorry, there are no {player_choice}'s.")
