@@ -97,36 +97,29 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
         print(f'The wheel landed on BANKRUPT.\nYou lost ${player_current_money:,}!')
         return '', - player_current_money, True
     print(f'The wheel landed on ${cash_value:,}.')
-    player_choice = input('Pick a consonant: ')
-    # this makes it so the player choosing a consonant is not case sensitive because it gets converted to a capital
-    # letter regardless if the player entered the letter in lowercase or uppercase
-    player_choice = player_choice.capitalize()
-    # check to see if the player enters a number 
-    #if player_choice.isspace() == True:
-    while player_choice == '':
+    while True:
+        player_choice = input('Pick a consonant: ')
+        # this makes it so the player choosing a consonant is not case sensitive because it gets converted to a capital
+        # letter regardless if the player entered the letter in lowercase or uppercase
+        player_choice = player_choice.capitalize()
+        # check to see if the player enters a number 
+        #if player_choice.isspace() == True:
+        if player_choice == '':
             print(f'Please enter exactly one character.')
-            player_choice = input('Pick a consonant: ')
-            player_choice = player_choice.capitalize()
-    while len(player_choice) > 1: 
-        print(f'Please enter exactly one character.')
-        player_choice = input('Pick a consonant: ')
-        player_choice = player_choice.capitalize()
-        # return '', 0, False
-    while not player_choice in consonants and not player_choice in vowels:
-        print(f'The character {player_choice} is not a letter.')
-        player_choice = input('Pick a consonant: ')
-        player_choice = player_choice.capitalize()
-        # return player_choice, 0, False
-    while player_choice in vowels:
-        print(f'Vowels must be purchased.')
-        player_choice = input('Pick a consonant: ')
-        player_choice = player_choice.capitalize()
-        # return '', 0, False
-    while not player_choice in remaining_consonants:
-        print(f'The letter {player_choice.upper()} has already been used.')
-        player_choice = input('Pick a consonant: ')
-        player_choice = player_choice.capitalize()
-        # return '', 0, False
+            continue
+        if len(player_choice) > 1: 
+            print(f'Please enter exactly one character.')
+            continue
+        if not player_choice in consonants and not player_choice in vowels:
+            print(f'The character {player_choice} is not a letter.')
+            continue
+        if player_choice in vowels:
+            print(f'Vowels must be purchased.')
+            continue
+        if not player_choice in remaining_consonants:
+            print(f'The letter {player_choice.upper()} has already been used.')
+            continue
+        break
     # check to see if what the player entered is a string of characters
     if not player_choice in phrase:
         print(f"I'm sorry, there are no {player_choice}'s.")
