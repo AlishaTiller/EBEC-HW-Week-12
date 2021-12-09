@@ -142,39 +142,42 @@ def vowel_action(phrase, guessed, player_current_money):
     # Buy A Vowel
     # player's current amount of cash
     remaining_vowels = list(filter(lambda letter: not letter in guessed, vowels))
-    if len(remaining_vowels) == 0:
-        print('There are no more vowels to buy.')
-        return ''
-    if player_current_money < 275:
-        print('You need at least $275 to buy a vowel.')
-        return ''
-    vowel_choosen = input('Pick a vowel: ')
-    # to make input not case sensitive
-    vowel_choosen = vowel_choosen.upper()
-    if vowel_choosen in guessed:
-        print(f'The letter {vowel_choosen} has already been purchased.')
-        return ''
-    # if the users vowel pick is in the consonants list 
-    if vowel_choosen in consonants:
-        print(f'Consonants cannot be purchased.')
-        return ''
-    # if the users vowel pick length is more than 1
-    if len(vowel_choosen) > 1:
-        print(f'Please enter exactly one character.')
-        return ''
-    # if the user vowel pick is not in the phrase selected from the txt file 
-    if not vowel_choosen in phrase:
-        print(f"I'm sorry, there are no {vowel_choosen}'s.")
-        return ''
-    if not vowel_choosen in vowels:
-        print(f'The character {vowel_choosen} is not a letter.')
-        return ''
+    while True:
+        if len(remaining_vowels) == 0:
+            print('There are no more vowels to buy.')
+            continue
+        if player_current_money < 275:
+            print('You need at least $275 to buy a vowel.')
+            continue
+        vowel_chosen = input('Pick a vowel: ')
+        # to make input not case sensitive
+        vowel_chosen = vowel_chosen.upper()
+        if vowel_chosen in guessed:
+            print(f'The letter {vowel_chosen} has already been purchased.')
+            continue
+        # if the users vowel pick is in the consonants list 
+        if vowel_chosen in consonants:
+            print(f'Consonants cannot be purchased.')
+            continue
+        # if the users vowel pick length is more than 1
+        if len(vowel_chosen) > 1:
+            print(f'Please enter exactly one character.')
+            continue
+        if not vowel_chosen in vowels:
+            print(f'The character {vowel_chosen} is not a letter.')
+            continue
+        # if the user vowel pick is not in the phrase selected from the txt file 
+        if not vowel_chosen in phrase:
+            print(f"I'm sorry, there are no {vowel_chosen}'s.")
+            return vowel_chosen
+        break
     # count the number of times that vowel appears in the phrase 
-    occurrences_of_vowel = phrase.count(f'{vowel_choosen}')
-    # all occurences of the guessed letter are reveraled and the player's earnings for the round are reduced by $275
-    player_current_money = player_current_money - 275
-    print(f"There is {occurrences_of_vowel} {vowel_choosen}'s.")
-    return vowel_choosen         
+    occurrences_of_vowel = phrase.count(f'{vowel_chosen}')
+    if occurrences_of_vowel > 1:
+        print(f"There are {occurrences_of_vowel} {vowel_chosen}'s.")
+    else:
+        print(f"There is {occurrences_of_vowel} {vowel_chosen}.")
+    return vowel_chosen         
                 
 
 def puzzle_action(phrase, player_current_money):
