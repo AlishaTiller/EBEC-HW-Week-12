@@ -36,30 +36,31 @@ def main():
 
     letters = []
     frequency_of_letter = {}
-    with open('Phrases.txt', 'r') as phrases:
+    alphabet = ['A','B','C','D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 
+                    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] 
+    for i in alphabet:
+        frequency_of_letter[i] = 0
+    with open('phrases.txt', 'r') as phrases:
         lines = phrases.readlines()
         # for each line in the file, delete the space, add to a list
         for line in lines: 
             line = line.strip()
             letters.append(line)
-            # turn many strings into one string
-            phrases_in_one_str = "".join(letters)
-            # replace the following with a space or nothing
-            phrases_in_one_str = phrases_in_one_str.replace('-', ' ')
-            phrases_in_one_str = phrases_in_one_str.replace("'", ' ')
-            phrases_in_one_str = phrases_in_one_str.replace(' ', '')
-            phrases_in_one_str = phrases_in_one_str.upper()
+        # turn many strings into one string
+        phrases_in_one_str = "".join(letters)
+        phrases_in_one_str = phrases_in_one_str.replace('-', ' ')
+        phrases_in_one_str = phrases_in_one_str.replace("'", ' ')
+        phrases_in_one_str = phrases_in_one_str.replace(' ', '')
+        phrases_in_one_str = phrases_in_one_str.replace('&', '')
+        phrases_in_one_str = phrases_in_one_str.upper()
         # for each letter in phrases_in_one_string... 
+        number_letters = len(phrases_in_one_str)
         for letter in phrases_in_one_str:
             # if the letter is in the list frequency_of_letter, add an occurrence to that letter
             if letter in frequency_of_letter:
                 frequency_of_letter[letter] += 1
             else:
                 frequency_of_letter[letter] = 1
-        # x-values/labels for graph and key to access dicitonary
-        alphabet = ['A','B','C','D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 
-                    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] 
-        # to create a list of elements for the y-values of the graph
         index = 0
         quantity_of_letter = []
         for single_letter in alphabet:
@@ -68,22 +69,19 @@ def main():
             # use the element as the key to access the value in the frequency_of_letter dictionary
             occurrences = frequency_of_letter[single_letter]
             # the number of times each letter is used divided by the total number of letters
-            occurrences = occurrences/915
+            occurrences = float(occurrences)/number_letters
             # add this occurrence value to a new list 
             quantity_of_letter.append(occurrences)
             index += 1
-        # totals the number of occurences of each letter from the list (= 915)
         total = sum(quantity_of_letter)
-    # details for creating a line graph 
     fig, ax = plt.subplots()
     phrases_in_one_str = alphabet
     occurrences = quantity_of_letter
     ax.bar(phrases_in_one_str,occurrences)
     ax.set_title('Letter Frequency in Puzzle Phrases')
     ax.set_xlabel('Letter')
-    ax.set_ylabel('Letter Apperance Frequency')
+    ax.set_ylabel('Letter Appearance Frequency')
     ax.grid()
-    ax.set_ylim(0,0.101)
     plt.show()
 
 if __name__ == '__main__':
