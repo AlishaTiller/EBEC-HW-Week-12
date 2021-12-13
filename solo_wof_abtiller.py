@@ -145,10 +145,9 @@ def vowel_action(phrase, guessed, player_current_money):
     while True:
         if len(remaining_vowels) == 0:
             print('There are no more vowels to buy.')
-            continue
+            break
         if player_current_money < 275:
-            print('You need at least $275 to buy a vowel.')
-            continue
+            break
         vowel_chosen = input('Pick a vowel: ')
         # to make input not case sensitive
         vowel_chosen = vowel_chosen.upper()
