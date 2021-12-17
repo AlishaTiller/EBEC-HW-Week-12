@@ -7,14 +7,14 @@ Description:
     Describe your program here.
 
 Contributors:
-    Name, login@purdue.edu [repeat for each]
+    Michael Tiller, michael.tiller@gmail.edu 
 
 My contributor(s) helped me:
     [ ] understand the assignment expectations without
         telling me how they will approach it.
-    [ ] understand different ways to think about a solution
+    [x] understand different ways to think about a solution
         without helping me plan my solution.
-    [ ] think through the meaning of a specific error or
+    [x] think through the meaning of a specific error or
         bug present in my code without looking at my code.
     Note that if you helped somebody else with their code, you
     have to list that person as a contributor.
@@ -145,23 +145,24 @@ def vowel_action(phrase, guessed, player_current_money):
     while True:
         if len(remaining_vowels) == 0:
             print('There are no more vowels to buy.')
-            break
+            return ''
         if player_current_money < 275:
-            break
+            print('You need at least $275 to buy a vowel.')
+            return ''
         vowel_chosen = input('Pick a vowel: ')
         # to make input not case sensitive
         vowel_chosen = vowel_chosen.upper()
-        if vowel_chosen in guessed:
-            print(f'The letter {vowel_chosen} has already been purchased.')
+        if len(vowel_chosen) != 1:
+            print(f'Please enter exactly one character.')
             continue
         # if the users vowel pick is in the consonants list 
         if vowel_chosen in consonants:
             print(f'Consonants cannot be purchased.')
             continue
-        # if the users vowel pick length is more than 1
-        if len(vowel_chosen) > 1:
-            print(f'Please enter exactly one character.')
+        if vowel_chosen in guessed:
+            print(f'The letter {vowel_chosen} has already been purchased.')
             continue
+        # if the users vowel pick length is more than 1
         if not vowel_chosen in vowels:
             print(f'The character {vowel_chosen} is not a letter.')
             continue
@@ -179,21 +180,21 @@ def vowel_action(phrase, guessed, player_current_money):
     return vowel_chosen         
                 
 
-def puzzle_action(phrase, player_current_money):
+def puzzle_action(phrase, player_current_money, guessed):
     print('Enter your solution.')
-    print(f'Clues:')
-    guess = input('Guess: ')
+    print(f'  Clues: {phrase_guessed(phrase, guessed)}')
+    guess = input('  Guess: ')
+    guess = guess.upper()
     if guess == phrase:
         print('Ladies and gentlemen, we have a winner!\n')
-        print(f'You earned ${max(player_current_money,1000)} this round.')
         return True
     print("I'm sorry. The correct solution was:")
     print(f'{phrase}')
     return False
 
 def quit_game(player_current_money,earning_per_round):      
-    print(f'\nYou earned ${earning_per_round} this round.\n\nThanks for playing!')
-    print(f'You earned a total of ${player_current_money}.')
+    print(f'\nYou earned $0 this round.\n\nThanks for playing!')
+    print(f'You earned a total of ${player_current_money:,}.')
         
 
 def main():
@@ -201,14 +202,14 @@ def main():
     phrases = load_phrases()
     total_earnings = 0
     
+    round = 1
     for phrase in phrases:
         phrase = phrase.upper()
         round_earnings = 0
-        round = 1
         guessed = ''
         while True:
             if round > 4:
-                print(f'You earned a total of ${total_earnings}.')
+                print(f'\nThanks for playing!\nYou earned a total of ${total_earnings:,}.')
                 return
             # index increases by one, so each subsequent round of the game uses the next phrase in the list
             status_report(round, phrase, guessed, round_earnings)
@@ -224,12 +225,16 @@ def main():
                 if guessed_vowel != '':
                     round_earnings -= 275
             elif player_chooses == '3':
-                solved = puzzle_action(phrase, round_earnings)
+                round = round + 1
+                solved = puzzle_action(phrase, round_earnings, guessed)
                 if solved:
+                    round_earnings = max(1000, round_earnings)
                     total_earnings += round_earnings
+                    print(f'You earned ${round_earnings:,} this round.')
                     break 
                 else: 
-                    round += 1
+                    print(f'\nYou earned $0 this round.')
+                    break
             elif player_chooses == '4':
                 quit_game(total_earnings, round_earnings)
                 return
