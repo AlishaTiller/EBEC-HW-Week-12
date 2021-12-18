@@ -4,7 +4,10 @@ Assignment: 12.1 - Solo Wof
 Date: 11/17/2021
 
 Description:
-    Describe your program here.
+    This the solo wheel of fortune game is for one player. There are 
+    4 actions that can be taken by the player to either win the game, 
+    lose, or quit the game. The phrases are generated from accessing 
+    the phrases.txt file. 
 
 Contributors:
     Michael Tiller, michael.tiller@gmail.edu 
@@ -53,7 +56,7 @@ def load_phrases():
     return phrase_list
 
 def removed_guess(phrase,guessed):
-
+    # removing the guesses letters from the list
     result = ''
     for letter in phrase:
         if letter in guessed:
@@ -64,6 +67,7 @@ def removed_guess(phrase,guessed):
     return result
 
 def phrase_guessed(phrase,guessed):
+    # keeping a record of all the guesses by the user
     result = ''
     for letter in phrase:
         if letter in guessed: 
@@ -76,6 +80,7 @@ def phrase_guessed(phrase,guessed):
     return result 
 
 def status_report(round, phrase, guessed, round_earnings):
+    # setting up each round display
     print(f'\n:: Solo WoF :::::::::::::::::::::::::::::: Round {round} of 4 ::')
     print(f'::{phrase_guessed(phrase, guessed).center(54)}::')
     print('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
@@ -105,8 +110,7 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
         # this makes it so the player choosing a consonant is not case sensitive because it gets converted to a capital
         # letter regardless if the player entered the letter in lowercase or uppercase
         player_choice = player_choice.capitalize()
-        # check to see if the player enters a number 
-        #if player_choice.isspace() == True:
+        # if statements to check all the possible errors that could occur to prevent user from taking this action
         if player_choice == '':
             print(f'Please enter exactly one character.')
             continue
@@ -134,13 +138,12 @@ def spin_the_wheel_action(phrase, guessed, player_current_money):
         print(f"There are {occurrences_of_letter} {player_choice}'s, which earns you ${dollar_amount_earned:,}.")
     else:
         print(f"There is {occurrences_of_letter} {player_choice}, which earns you ${dollar_amount_earned:,}.")
-    # remove the consonant from the consonants_to_choose list and add it to the consonants_used list
+    
     return player_choice, dollar_amount_earned
 
                  
 def vowel_action(phrase, guessed, player_current_money):
-    # Buy A Vowel
-    # player's current amount of cash
+    # to find the reminaing number of vowels left to choose from
     remaining_vowels = list(filter(lambda letter: not letter in guessed, vowels))
     while True:
         if len(remaining_vowels) == 0:
@@ -177,6 +180,7 @@ def vowel_action(phrase, guessed, player_current_money):
         print(f"There are {occurrences_of_vowel} {vowel_chosen}'s.")
     else:
         print(f"There is {occurrences_of_vowel} {vowel_chosen}.")
+
     return vowel_chosen         
                 
 
@@ -185,29 +189,34 @@ def puzzle_action(phrase, player_current_money, guessed):
     print(f'  Clues: {phrase_guessed(phrase, guessed)}')
     guess = input('  Guess: ')
     guess = guess.upper()
+    # check to see if the user's input is the correct answer
     if guess == phrase:
         print('Ladies and gentlemen, we have a winner!\n')
         return True
+    # if false, return the following statement
     print("I'm sorry. The correct solution was:")
     print(f'{phrase}')
     return False
 
-def quit_game(player_current_money,earning_per_round):      
+def quit_game(player_current_money,earning_per_round):  
+    # if player chooses to quit game (action 4)    
     print(f'\nYou earned $0 this round.\n\nThanks for playing!')
     print(f'You earned a total of ${player_current_money:,}.')
         
 
 def main():
+    # beginning game print statement 
     print(f'Welcome to Solo Wheel of Fortune!')
     phrases = load_phrases()
     total_earnings = 0
-    
+    # round set at 1, and will increases depending on the actions taken by the user
     round = 1
     for phrase in phrases:
         phrase = phrase.upper()
         round_earnings = 0
         guessed = ''
         while True:
+            # if the round number is going to be 5, then the game ends
             if round > 4:
                 print(f'\nThanks for playing!\nYou earned a total of ${total_earnings:,}.')
                 return
@@ -216,15 +225,19 @@ def main():
             player_chooses = input('Enter the number of your choice: ')
             # using the player_chooses as the key to access the dictionary which contains the value of what acitvity to do
             if player_chooses == '1':
+                # if player chooses to spin the wheel
+                # calling the function and assinging variables to what the function returns
                 guessed_consonant, dollar_amount_earned = spin_the_wheel_action(phrase, guessed, round_earnings)
                 guessed += guessed_consonant
                 round_earnings += dollar_amount_earned
             elif player_chooses == '2':
+                # if player chooses to buy a vowel
                 guessed_vowel = vowel_action(phrase, guessed, round_earnings)
                 guessed += guessed_vowel
                 if guessed_vowel != '':
                     round_earnings -= 275
             elif player_chooses == '3':
+                # if player chooses to solve the puzzle
                 round = round + 1
                 solved = puzzle_action(phrase, round_earnings, guessed)
                 if solved:
@@ -236,6 +249,7 @@ def main():
                     print(f'\nYou earned $0 this round.')
                     break
             elif player_chooses == '4':
+                # if player chooses to quit the game
                 quit_game(total_earnings, round_earnings)
                 return
             else: 
